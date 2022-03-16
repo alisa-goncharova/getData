@@ -1,33 +1,27 @@
 const puppeteer = require('puppeteer');
 let linksData = require('./links');
-// const { linksData } = require('./links');
-//
-// console.log(linksData);
 
-global.likesData = linksData;
+let input = 'Some by Mi';
 
 linksData.links.forEach((el, index) => {
 
-    console.log(el);
-
     let scrape = async () => {
 
-        const browser = await puppeteer.launch({headless: false});
+        const browser = await puppeteer.launch({headless: true});
         const page = await browser.newPage();
 
         await page.goto(linksData.links[index].link);
-        await page.waitFor(1000);
+        await page.waitFor(500);
 
-        await page.evaluate(() => {
+        await page.evaluate((selector, val) => {
 
-            document.querySelector('#search > input').value = 'Some by mi'
-            //document.querySelector(linksData.links[index].attrSearch).value = 'Some by mi';
+            document.querySelector(selector).value = val;
 
-        });
+        }, linksData.links[index].attrSearch, input);
 
-        await page.click('#search > button');
+        await page.click(linksData.links[index].btnSearch);
 
-        await page.waitFor(1000);
+        await page.waitFor(500);
 
         const result = await page.evaluate(() => {
 
