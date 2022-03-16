@@ -7,10 +7,11 @@ linksData.links.forEach((el, index) => {
 
     let scrape = async () => {
 
-        const browser = await puppeteer.launch({headless: true});
+        const browser = await puppeteer.launch({headless: false});
         const page = await browser.newPage();
 
         await page.goto(linksData.links[index].link);
+        await page.setViewport({ width: 1000, height: 500}); //размер страницы
         await page.waitFor(500);
 
         await page.evaluate((selector, val) => {
@@ -23,16 +24,16 @@ linksData.links.forEach((el, index) => {
 
         await page.waitFor(500);
 
-        const result = await page.evaluate(() => {
+        const result = await page.evaluate((title, price) => {
 
-            let title = document.querySelector('#products > div:nth-child(1) > div > div > div.product-card__title').innerText;
-            let price = document.querySelector('#products > div:nth-child(1) > div > div > p').innerText;
+            let Title = document.querySelector(title).innerText;
+            let Price = document.querySelector(price).innerText;
 
             return {
-                title, price
+                Title, Price
             }
 
-        })
+        }, linksData.links[index].title, linksData.links[index].price);
 
         await browser.close();
 
