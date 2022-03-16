@@ -1,0 +1,7 @@
+{
+    "name": "getData-puppeteer",
+    "version": "1.0.0",
+    "devDependencies": {
+        "puppeteer": "^13.5.1"
+    }
+}
